@@ -3,15 +3,26 @@ class getZodiacCombination {
   constructor(dob, sex){
     this.dob = dob;
     this.sex = sex;
-      if (!dob.includes("-")) {
-          throw new Error("DOB has not been passed in the correct format. Please ensure dob is separated by '-'");
-      }
-    this.dateArray = dob.split("-");
+    if (!dob.includes("/")) {
+        throw new Error("DOB has not been passed in the correct format. Please ensure dob is separated by '/'");
+    }
+    this.dateArray = dob.split("/");
     this.day = Number(this.dateArray[0]);
     this.month = Number(this.dateArray[1]);
     this.year = Number(this.dateArray[2]);
     this.yearSuffix = Number(dob.slice(-1));
+    this.cny_start_dates = ["06/02", "26/01", "14/02", "03/02", "23/01", "10/02", "30/01", "18/02", "08/02", "27/01", "15/02", "05/02", "25/01", "11/02", "31/01", "19/02", "09/02", "29/01", "17/02"]
 }
+    
+    cny_start_date(year){
+      const base_start_year = 10000
+      const cycle_number = 19
+      const gap = base_start_year + year
+      const closest_year = (Math.floor(gap / cycle_number) * 19) - year
+      const difference = base_start_year - closest_year
+      const start_date = this.cny_start_dates[difference]
+      return start_date
+    }
 
     western(day, month){
         const zodiacSigns = {
@@ -27,9 +38,9 @@ class getZodiacCombination {
             "libra": {"western": "Libra", "westernId": 7},
             "scorpio" : {"western": "Scorpio", "westernId": 8},
             "sagittarius": {"western": "Sagittarius", "westernId": 9}
-          };
+          }
         
-          if((month === 1 && day <= 20) || (month === 12 && day >=22)) {
+          if((month == 1 && day <= 20) || (month == 12 && day >=22)) {
             return zodiacSigns.capricorn;
           } else if ((month == 1 && day >= 21) || (month == 2 && day <= 18)) {
             return zodiacSigns.aquarius;
@@ -37,7 +48,7 @@ class getZodiacCombination {
             return zodiacSigns.pisces;
           } else if((month == 3 && day >= 21) || (month == 4 && day <= 20)) {
             return zodiacSigns.aries;
-          } else if((month === 4 && day >= 21) || (month == 5 && day <= 20)) {
+          } else if((month == 4 && day >= 21) || (month == 5 && day <= 20)) {
             return zodiacSigns.taurus;
           } else if((month == 5 && day >= 21) || (month == 6 && day <= 20)) {
             return zodiacSigns.gemini;
@@ -76,11 +87,15 @@ class getZodiacCombination {
         }
     }
 
-    animal(year){
-        switch ((year - 4) % 12) {
+    calculateAnimalData(year){
+        if (year < -10001) {
+          throw new Error("Sorry! You can't go further than 10,000 BC");
+        }
+        const finalYear = year < 4 ? 12 - (Math.abs(year - 4) % 12) : (year - 4) % 12
+        console.log(finalYear)
+        switch (finalYear) {
             case 0:
                 return {"animal": "Rat", "animalId": 4};
-    
             case 1:
                 return {"animal": "Ox", "animalId": 5};
     
@@ -113,24 +128,38 @@ class getZodiacCombination {
     
             case 11:
                 return {"animal": "Pig", "animalId": 3};
-    
         }
     }
 
+    getAnimalData(){
+      var cnyDateArray = this.cny_start_date(this.year).split("/")
+      const cnyDay = Number(cnyDateArray[0])
+      const cnyMonth = Number(cnyDateArray[1])
+      var animal
+      if( (this.month < cnyMonth) || (this.day < cnyDay && this.month == cnyMonth) ){
+        animal = this.calculateAnimalData(this.year -1)
+      } else {
+        animal = this.calculateAnimalData(this.year)
+      }
+      return animal
+    }
+
     getInfo() {
-        const western = this.western(this.day, this.month);
-        const element = this.element(this.yearSuffix);
-        const animal = this.animal(this.year);
-        const trio = `${western.western} ${element.element} ${animal.animal}`;
-        const duo = `${element.element} ${animal.animal}`;
-        return {
-            ...western,
-            ...element,
-            ...animal,
+        const westernData = this.western(this.day, this.month)
+        const elementData = this.element(this.yearSuffix)
+        const animalData = this.getAnimalData(this.year)
+        const trio = `${westernData.western} ${elementData.element} ${animalData.animal}`
+        const element_animal_duo = `${elementData.element} ${animalData.animal}`
+        const obj = {
+            ...westernData,
+            ...elementData,
+            ...animalData,
             ...{"sex": this.sex},
             ...{"trio": trio},
-            ...{"duo": duo}
-        };
+            ...{"element_animal_duo": element_animal_duo},
+            ...{"start_date": this.cny_start_date(this.year)}
+        }
+        return obj
     }
 }
 

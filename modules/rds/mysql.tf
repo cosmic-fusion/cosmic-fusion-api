@@ -26,7 +26,7 @@ resource "aws_security_group" "cosmic_fusion_rds" {
 
 module "db" {
   source  = "terraform-aws-modules/rds/aws"
-  version = "2.21.0"
+  version = "3.3.0"
 
   identifier             = "${var.env}-cosmic-fusion"
   name                   = "${var.env}_cosmic_fusion_db"

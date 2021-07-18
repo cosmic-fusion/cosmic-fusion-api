@@ -13,36 +13,40 @@ This endpoint takes **two** query strings and returns the metadata of an individ
 1. `dob`
 2. `sex_at_birth`
 
-Note: `dob` structure is `dd-mm-yyyy`
+Note: `dob` structure is `dd/mm/yyyy`
 
 > Structure
 api.cosmicfusions.com/get-profile?dob=${dob}&sex_at_birth=${sex_at_birth}
 
 > Example usage
-api.cosmicfusions.com/get-profile?dob=01-01-1900&sex_at_birth=1
+api.cosmicfusions.com/get-profile?dob=01/01/1900&sex_at_birth=1
 
 ### Expected Output
 
 ```
 {
-  "statusCode": 200,
-  "headers": {
-    "Content-Type": "application/json"
-  },
-  "body": [
-    {
-      "characterProfileId": 1090,
-      "animalId": 4,
-      "elementId": 0,
-      "westernId": 10,
-      "summary": "These girls can be really rather charming. Don't be fooled, hoodwinked or duped though, this is no pussycat, this is a hard nosed bruiser, a ruthless, single-minded, ferociously-ambitious cookie, who knew from about the age of six months exactly what she wanted to do. It may not be very feminine but these girls do love money, they'll doubtless deny it, but it'll fall on deaf ears. Capricorn Metal Rats love, love, love money and, unlike Leo girls who take the short cut and just marry it, these Trojans will work until they drop in order to accumulate as much of the stuff as they can. These girls are impressive, end of story. They're determined, organised, driven, grounded, scarily strong, powerful, secure, not remotely sensitive and have a single minded dedication to their career that might be described as blinkered. They're also sensible as hell - you certainly won't find this one keeling over at midnight somewhere north of Blackpool on a Saturday night. Don't get me wrong, they're not boring, they're terrific fun and will play pretty hard, but they'll never lose control, no way. They're chameleon-like at times, they can play the pussycat doll brilliantly but the claws on this pussycat doll would have King Kong running for the hills. Awesome.",
-      "sex": 1,
-      "isEdited": 1,
-      "trio": "Capricorn Metal Rat"
-    }
-  ]
+   "statusCode":200,
+   "headers":{
+      "Content-Type":"application/json"
+   },
+   "body":[
+      {
+         "characterProfileId":1088,
+         "animalId":3,
+         "elementId":0,
+         "westernId":10,
+         "summary":"Conscientious charmers. Aside from being unusually sensitive for a Capricorn girl these cuties are nigh on perfect. They have the strength, drive and ambition of the Capricorn/Metal angle and the compassion and general sweet-as-candy characteristics of the Pig. They are pretty single minded in many respects and have a seriously creative bent aligned with a very grounded, common sense business brain. It wouldn't surprise terribly if they ran their own very creative, very successful venture. These girls really are over burdened with a catalogue of fab traits and they're also ridiculously organised. Something of an uber star then? Yes, kind of. Capricorn Metal Pigs certainly have huge potential and when you're conscientious, organised and talented you tend not to fail. They'll be modest though, this isn't an all-singing, all-dancing ego-fest, they just know what they want and knuckle down. Their charm tends to reveal itself when they relax, they can be quite serious where work is concerned so the social side is something of a 'release' and you discover this gorgeous charming, girly thing. They really are a bit special. Lovely.",
+         "sex":1,
+         "trio":"Capricorn Metal Pig"
+      }
+   ]
 }
 ```
+
+> Both the **GetProfile** and **GetYear** endpoints also take negative integers as years, which translate to BC. For example getting the profile of Julius Caesar, born on 12th July 100 BC, would be in the following format:
+
+`api.cosmicfusions.com/get-profile?dob=12/07/-100&sex_at_birth=0`
+
 
 ## GetYear
 
@@ -50,32 +54,34 @@ This endpoint takes **one** querystring and returns metadata about that day, mon
 
 1. `date`
 
-Note: `date` structure is `dd-mm-yyyy`
+Note: `date` structure is `dd/mm/yyyy`
 
 > Structure
 api.cosmicfusions.com/get-year?date=${date}
 
 > Example usage
-api.cosmicfusions.com/get-year?date=01-01-1900
+api.cosmicfusions.com/get-year?date=01/01/1900
 
 ### Expected Output
 
 ```
 {
-  "statusCode": 200,
-  "headers": {
-    "Content-Type": "application/json"
-  },
-  "body": {
-    "western": "Capricorn",
-    "westernId": 10,
-    "element": "Metal",
-    "elementId": 0,
-    "animal": "Rat",
-    "animalId": 4,
-    "trio": "Capricorn Metal Rat",
-    "duo": "Metal Rat"
-  }
+   "statusCode":200,
+   "headers":{
+      "Content-Type":"application/json"
+   },
+   "body":{
+      "western":"Capricorn",
+      "westernId":10,
+      "element":"Metal",
+      "elementId":0,
+      "animal":"Pig",
+      "animalId":3,
+      "sex":0,
+      "trio":"Capricorn Metal Pig",
+      "element_animal_duo":"Metal Pig",
+      "start_date":"30/01"
+   }
 }
 ```
 
@@ -134,7 +140,7 @@ This endpoint takes **four** query strings and returns data on two individuals:
 api.cosmicfusions.com/get-friend?dob=${dob}&sex_at_birth=${sex_at_birth}&friend_dob=${friend_dob}&friend_sex_at_birth=${friend_sex_at_birth}
 
 > Example usage
-api.cosmicfusions.com/get-friend?dob=01-01-1900&sex_at_birth=0&friend_dob=01-01-1900&friend_sex_at_birth=1
+api.cosmicfusions.com/get-friend?dob=01/01/1900&sex_at_birth=0&friend_dob=01/01/1900&friend_sex_at_birth=1
 
 ### Expected Output
 ```
@@ -144,12 +150,16 @@ api.cosmicfusions.com/get-friend?dob=01-01-1900&sex_at_birth=0&friend_dob=01-01-
       "Content-Type":"application/json"
    },
    "body":{
-      "combination_1":"Capricorn Metal Rat",
-      "combination_2":"Capricorn Metal Rat",
-      "character_profile_1":"Money, money, money, it's doubtless the Capricorn Metal Rats favourite song. They adore money, they'd marry it if they could. Their kids are probably called Buck, Nickel and Dime. You get the point. These boys will probably, like all Capricorn men, boringly deny that money is their singular goal in life. Tosh, utter tosh. They live and breathe it and, thankfully for them, they're blessed, imbued with, and possess one of the greatest work ethics known to man. If they could work 425 hours a week they would, even if they made their first million by their 21st birthday they wouldn't retire until their 110th birthday. Work and money, money and work, it's oxygen to these characters. They're so single minded no one can tell them what to do. You have to understand that these boys had written their 'life-plan' years before they left their cot. Many Capricorn men use charm to further their career, not these boys, not needed - they just chug along relentlessly until that life-plan goal is reached. They're hard nosed, ruthless, utterly determined juggernauts of self-belief and determination. They're not necessarily cuddly and they're pretty much obsessed by their quest for money and success but boy, are they impressive. ",
-      "character_profile_2":"These girls can be really rather charming. Don't be fooled, hoodwinked or duped though, this is no pussycat, this is a hard nosed bruiser, a ruthless, single-minded, ferociously-ambitious cookie, who knew from about the age of six months exactly what she wanted to do. It may not be very feminine but these girls do love money, they'll doubtless deny it, but it'll fall on deaf ears. Capricorn Metal Rats love, love, love money and, unlike Leo girls who take the short cut and just marry it, these Trojans will work until they drop in order to accumulate as much of the stuff as they can. These girls are impressive, end of story. They're determined, organised, driven, grounded, scarily strong, powerful, secure, not remotely sensitive and have a single minded dedication to their career that might be described as blinkered. They're also sensible as hell - you certainly won't find this one keeling over at midnight somewhere north of Blackpool on a Saturday night. Don't get me wrong, they're not boring, they're terrific fun and will play pretty hard, but they'll never lose control, no way. They're chameleon-like at times, they can play the pussycat doll brilliantly but the claws on this pussycat doll would have King Kong running for the hills. Awesome.",
+      "combination_1":"Capricorn Metal Pig",
+      "combination_2":"Capricorn Metal Pig",
+      "character_profile_1":"Okay, he may be a complete softie and an apparent pacifist but don't be misled, he's a seriously ambitious, driven character with a killer charm. As with all Capricorn men, money is the spur. They deny it, of course, but it's inherent and that, alongside a terrific work ethic, results in Mr Understated making serious waves in the world of work. Capricorn men do have one Achilles heel - they can't handle confrontation and have no idea how to deal with emotion. To counter this they do tend to lay on the charm. It's an impressive weapon really, because these apparently strong characters are incredibly sensitive and try desperately hard to conceal the fact. Capricorn Metal Pigs are nowhere near as assured as they appear and need a welter of reassurance, love and encouragement to truly achieve their goals. Where these boys genuinely come into their own is when fatherhood enters the fray. Two things, firstly they love it - if anyone could be a stay-at-home dad, it's these characters. Secondly, it comes so naturally to them. Ambitious they may be but a rural setting with a soulmate and the aforementioned clan is equally appealing to these beautiful men.",
+      "character_profile_2":"Conscientious charmers. Aside from being unusually sensitive for a Capricorn girl these cuties are nigh on perfect. They have the strength, drive and ambition of the Capricorn/Metal angle and the compassion and general sweet-as-candy characteristics of the Pig. They are pretty single minded in many respects and have a seriously creative bent aligned with a very grounded, common sense business brain. It wouldn't surprise terribly if they ran their own very creative, very successful venture. These girls really are over burdened with a catalogue of fab traits and they're also ridiculously organised. Something of an uber star then? Yes, kind of. Capricorn Metal Pigs certainly have huge potential and when you're conscientious, organised and talented you tend not to fail. They'll be modest though, this isn't an all-singing, all-dancing ego-fest, they just know what they want and knuckle down. Their charm tends to reveal itself when they relax, they can be quite serious where work is concerned so the social side is something of a 'release' and you discover this gorgeous charming, girly thing. They really are a bit special. Lovely.",
       "summary":"Hold on - don't fret, sweat or commence a mini-meltdown!\r\nThe point of the 1440 system is to act as a barometer - no more.  Anyone who finds themselves in the 0-30% bracket shouldn't for a moment consider their relationship as irreversibly flawed - it isn't but it does require much more effort in you two 'understanding, appreciating and comprehending' one another's characters.",
-      "compatibility_score":22
+      "compatibility_score":7
    }
 }
 ```
+
+# Improvements
+
+Please submit a pull request with any suggested improvements.
